@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 require 'cgi'
-require 'base64'
-require 'bigdecimal'
+require 'liquid/base64'
 
 module Liquid
   module StandardFilters
@@ -731,8 +730,7 @@ module Liquid
     # @liquid_syntax number | abs
     # @liquid_return [number]
     def abs(input)
-      result = Utils.to_number(input).abs
-      result.is_a?(BigDecimal) ? result.to_f : result
+      Utils.to_number(input).abs
     end
 
     # @liquid_public_docs
@@ -803,7 +801,6 @@ module Liquid
     # @liquid_return [number]
     def round(input, n = 0)
       result = Utils.to_number(input).round(Utils.to_number(n))
-      result = result.to_f if result.is_a?(BigDecimal)
       result = result.to_i if n == 0
       result
     rescue ::FloatDomainError => e
@@ -848,7 +845,7 @@ module Liquid
 
       result = Utils.to_number(input)
       result = min_value if min_value > result
-      result.is_a?(BigDecimal) ? result.to_f : result
+      result
     end
 
     # @liquid_public_docs
@@ -863,7 +860,7 @@ module Liquid
 
       result = Utils.to_number(input)
       result = max_value if max_value < result
-      result.is_a?(BigDecimal) ? result.to_f : result
+      result
     end
 
     # @liquid_public_docs
@@ -911,7 +908,7 @@ module Liquid
         Utils.to_number(item)
       end
 
-      result.is_a?(BigDecimal) ? result.to_f : result
+      result
     end
 
     private
@@ -923,8 +920,7 @@ module Liquid
     end
 
     def apply_operation(input, operand, operation)
-      result = Utils.to_number(input).send(operation, Utils.to_number(operand))
-      result.is_a?(BigDecimal) ? result.to_f : result
+      Utils.to_number(input).send(operation, Utils.to_number(operand))
     end
 
     def nil_safe_compare(a, b)

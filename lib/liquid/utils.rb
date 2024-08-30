@@ -48,11 +48,11 @@ module Liquid
     def self.to_number(obj)
       case obj
       when Float
-        BigDecimal(obj.to_s)
+        obj
       when Numeric
         obj
       when String
-        /\A-?\d+\.\d+\z/.match?(obj.strip) ? BigDecimal(obj) : obj.to_i
+        /\A-?\d+\.\d+\z/.match?(obj.strip) ? obj.strip.to_f : obj.to_i
       else
         if obj.respond_to?(:to_number)
           obj.to_number
